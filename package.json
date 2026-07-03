@@ -1,44 +1,40 @@
 {
   "name": "linkedin-to-json-resume",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "LinkedIn to JSON Résumé",
-  "main": "src/js/main.js",
-  "bin": "dist-cli/cli.js",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "dist/main.js",
+  "bin": "bin/cli",
   "files": [
-    "dist-cli",
-    "yarn.lock",
-    "package.json"
+    "bin",
+    "src"
   ],
   "scripts": {
-    "start": "npm run develop",
-    "develop": "parcel src/index.html",
-    "build:cli": "parcel build src/js/cli.ts --target node --no-source-maps --out-dir dist-cli && node scripts/add-shebang.js && chmod +x dist-cli/cli.js",
-    "build:web": "parcel build src/index.html --public-url ./",
-    "build": "parcel build src/index.html --public-url ./",
-    "lint": "./node_modules/jshint/bin/jshint src/js/*.js",
-    "test": "npm run build:web",
-    "cli": "npm run build:cli && node dist-cli/cli.js",
-    "prepare": "npm run build:cli"
+    "dev": "bunx serve dist",
+    "build:web": "tsup --config tsup.config.web.ts && cp -r src/styles dist/ && cp src/index.html dist/ && sed -i \"s/__COMMIT_SHA__/$(git rev-parse --short HEAD)/g\" dist/index.html && bun scripts/compress.mjs",
+    "build:cli": "tsup --config tsup.config.cli.ts && chmod +x dist-cli/cli.js",
+    "build": "bun run build:web",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --write src/",
+    "fmt": "biome format --write src/",
+    "test": "bun test",
+    "ci": "bun run lint && bun run build && bun test",
+    "cli": "bun run build:cli && bun dist-cli/cli.js",
+    "clean": "rm -rf dist dist-cli"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JMPerez/linkedin-to-json-resume.git"
-  },
-  "author": "José M. Pérez",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/JMPerez/linkedin-to-json-resume/issues"
-  },
-  "homepage": "https://github.com/JMPerez/linkedin-to-json-resume#readme",
   "devDependencies": {
-    "@types/node": "^22.13.4",
-    "jshint": "^2.13.6",
-    "parcel-bundler": "^1.12.5",
-    "typescript": "^5.7.3"
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "latest",
+    "@types/node": "^26.1.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "tsup": "^8.3.6",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "isomorphic-unzip": "^1.1.1",
-    "moment": "^2.30.1",
-    "yauzl-promise": "^4.0.0"
+    "fflate": "^0.8.3"
   }
 }
