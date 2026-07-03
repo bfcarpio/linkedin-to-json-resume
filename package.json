@@ -1,6 +1,6 @@
 {
   "name": "linkedin-to-json-resume",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LinkedIn to JSON Résumé",
   "type": "module",
   "engines": {
