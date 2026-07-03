@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "dev": "bunx serve dist",
-    "build:web": "tsup --config tsup.config.web.ts && cp -r src/styles dist/ && cp src/index.html dist/ && sed -i \"s/__COMMIT_SHA__/$(git rev-parse --short HEAD)/g\" dist/index.html && bun scripts/compress.mjs",
+    "build:web": "tsup --config tsup.config.web.ts && cp -r src/styles dist/ && cp src/index.html dist/ && sed -i \"s/__VERSION__/DEVELOPMENT/g\" dist/index.html && sed -i \"s/__COMMIT_SHA__/$(git rev-parse --short HEAD)/g\" dist/index.html && bun scripts/compress.mjs",
     "build:cli": "tsup --config tsup.config.cli.ts && chmod +x dist-cli/cli.js",
     "build": "bun run build:web",
     "lint": "biome check src/",

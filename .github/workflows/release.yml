@@ -25,7 +25,7 @@ jobs:
 
       - name: Inject release version
         run: |
-          sed -i "s|__COMMIT_SHA__|${GITHUB_REF_NAME} · __COMMIT_SHA__|g" src/index.html
+          sed -i "s|__VERSION__|${GITHUB_REF_NAME}|g" src/index.html
 
       - name: Build
         run: |
