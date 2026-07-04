@@ -7,14 +7,16 @@
     "node": ">=24"
   },
   "main": "dist/main.js",
-  "bin": "bin/cli",
+  "bin": "dist-cli/cli.js",
   "files": [
-    "bin",
+    "dist",
+    "dist-cli",
     "src"
   ],
   "scripts": {
     "dev": "npx serve dist",
     "build:web": "tsup --config tsup.config.web.ts && cp -r src/styles dist/ && cp src/index.html dist/ && sed -i \"s/__VERSION__/DEVELOPMENT/g\" dist/index.html && sed -i \"s/__COMMIT_SHA__/$(git rev-parse --short HEAD)/g\" dist/index.html && node scripts/compress.mjs",
+    "prepare": "npm run build:cli",
     "build:cli": "tsup --config tsup.config.cli.ts && chmod +x dist-cli/cli.js",
     "build": "npm run build:web",
     "lint": "biome check src/",
