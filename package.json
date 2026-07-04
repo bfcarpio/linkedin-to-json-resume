@@ -8,11 +8,7 @@
   },
   "main": "dist/main.js",
   "bin": "dist-cli/cli.js",
-  "files": [
-    "dist",
-    "dist-cli",
-    "src"
-  ],
+  "files": ["dist", "dist-cli", "src"],
   "scripts": {
     "dev": "npx serve dist",
     "build:web": "tsup --config tsup.config.web.ts && cp -r src/styles dist/ && cp src/index.html dist/ && sed -i \"s/__VERSION__/DEVELOPMENT/g\" dist/index.html && sed -i \"s/__COMMIT_SHA__/$(git rev-parse --short HEAD)/g\" dist/index.html && node scripts/compress.mjs",
@@ -23,6 +19,7 @@
     "lint:fix": "biome check --write src/",
     "fmt": "biome format --write src/",
     "test": "node --import tsx --test",
+    "postinstall": "simple-git-hooks",
     "ci": "npm run lint && npm run build && npm run test",
     "cli": "npm run build:cli && node dist-cli/cli.js",
     "clean": "rm -rf dist dist-cli"
@@ -33,10 +30,19 @@
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "tsup": "^8.3.6",
+    "lint-staged": "^15.5.0",
+    "simple-git-hooks": "^2.11.0",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3"
   },
   "dependencies": {
     "fflate": "^0.8.3"
+  },
+  "lint-staged": {
+    "*.{ts,js,tsx,jsx,mjs,cjs}": ["biome check --write --unsafe"],
+    "*.{json,md,yml,yaml}": ["biome check --write --unsafe"]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   }
 }
