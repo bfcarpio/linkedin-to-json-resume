@@ -39,8 +39,7 @@
     "fflate": "^0.8.3"
   },
   "lint-staged": {
-    "*.{ts,js,tsx,jsx,mjs,cjs}": ["biome check --write --unsafe"],
-    "*.{json,md,yml,yaml}": ["biome check --write --unsafe"]
+    "*.{ts,js,tsx,jsx,mjs,cjs,json}": ["biome check --write --unsafe"]
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
