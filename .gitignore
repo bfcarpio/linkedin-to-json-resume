@@ -2,6 +2,5 @@ node_modules/
 dist/
 dist-cli/
 .cache/
-bun.lockb
 *.tsbuildinfo
 .DS_Store

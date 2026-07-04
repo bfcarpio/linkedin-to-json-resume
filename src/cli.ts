@@ -44,7 +44,9 @@ const customBullets = bulletFlag?.split("=")[1];
 
 const zipFile = args.find((a) => !a.startsWith("--"));
 if (!zipFile) {
-  console.error('Usage: bun run cli <linkedin-export.zip> [--bullets="•➲-"]');
+  console.error(
+    'Usage: node dist-cli/cli.js <linkedin-export.zip> [--bullets="•➲-"]',
+  );
   exit(1);
 }
 

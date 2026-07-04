@@ -1,4 +1,5 @@
-import { describe, expect, it } from "bun:test";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import { parseBullets } from "../src/bullet-parser";
 
 describe("parseBullets", () => {
@@ -7,8 +8,8 @@ describe("parseBullets", () => {
       const text =
         "Led the engineering team • Ship feature A • Ship feature B • Ship feature C";
       const result = parseBullets(text);
-      expect(result.summary).toBe("Led the engineering team");
-      expect(result.highlights).toEqual([
+      assert.strictEqual(result.summary, "Led the engineering team");
+      assert.deepStrictEqual(result.highlights, [
         "Ship feature A",
         "Ship feature B",
         "Ship feature C",
@@ -19,8 +20,8 @@ describe("parseBullets", () => {
       const text =
         "Managed a team of 5 • Hired 3 engineers • Improved velocity by 20%";
       const result = parseBullets(text);
-      expect(result.summary).toBe("Managed a team of 5");
-      expect(result.highlights).toEqual([
+      assert.strictEqual(result.summary, "Managed a team of 5");
+      assert.deepStrictEqual(result.highlights, [
         "Hired 3 engineers",
         "Improved velocity by 20%",
       ]);
@@ -29,8 +30,8 @@ describe("parseBullets", () => {
     it("splits text with ➲ arrow bullets", () => {
       const text = "Key achievements ➲ Revenue grew 30% ➲ Costs reduced 15%";
       const result = parseBullets(text);
-      expect(result.summary).toBe("Key achievements");
-      expect(result.highlights).toEqual([
+      assert.strictEqual(result.summary, "Key achievements");
+      assert.deepStrictEqual(result.highlights, [
         "Revenue grew 30%",
         "Costs reduced 15%",
       ]);
@@ -39,8 +40,8 @@ describe("parseBullets", () => {
     it("handles * asterisk bullets", () => {
       const text = "Accomplishments * Built feature X * Shipped Y";
       const result = parseBullets(text);
-      expect(result.summary).toBe("Accomplishments");
-      expect(result.highlights).toEqual(["Built feature X", "Shipped Y"]);
+      assert.strictEqual(result.summary, "Accomplishments");
+      assert.deepStrictEqual(result.highlights, ["Built feature X", "Shipped Y"]);
     });
   });
 
@@ -49,8 +50,8 @@ describe("parseBullets", () => {
       const text =
         "Led the engineering team\n• Ship feature A\n• Ship feature B";
       const result = parseBullets(text);
-      expect(result.summary).toBe("Led the engineering team");
-      expect(result.highlights).toEqual(["Ship feature A", "Ship feature B"]);
+      assert.strictEqual(result.summary, "Led the engineering team");
+      assert.deepStrictEqual(result.highlights, ["Ship feature A", "Ship feature B"]);
     });
   });
 
@@ -59,36 +60,36 @@ describe("parseBullets", () => {
       const text =
         "Just a single line description with no bullet points at all";
       const result = parseBullets(text);
-      expect(result.summary).toBe(text);
-      expect(result.highlights).toEqual([]);
+      assert.strictEqual(result.summary, text);
+      assert.deepStrictEqual(result.highlights, []);
     });
 
     it("returns empty result for empty text", () => {
       const result = parseBullets("");
-      expect(result.summary).toBe("");
-      expect(result.highlights).toEqual([]);
+      assert.strictEqual(result.summary, "");
+      assert.deepStrictEqual(result.highlights, []);
     });
 
     it("handles mixed bullet styles in one string", () => {
       const text = "Summary line • Point one ‣ Point two";
       const result = parseBullets(text);
-      expect(result.summary).toBe("Summary line");
-      expect(result.highlights).toEqual(["Point one", "Point two"]);
+      assert.strictEqual(result.summary, "Summary line");
+      assert.deepStrictEqual(result.highlights, ["Point one", "Point two"]);
     });
 
     it("handles bullet at very start of text", () => {
       const text = "• Point one • Point two";
       const result = parseBullets(text);
-      expect(result.summary).toBe("");
-      expect(result.highlights).toEqual(["Point one", "Point two"]);
+      assert.strictEqual(result.summary, "");
+      assert.deepStrictEqual(result.highlights, ["Point one", "Point two"]);
     });
 
     it("does not treat hyphens in compound words as bullets (summary)", () => {
       // Hyphens are not default bullets, so entire text is summary
       const text = "Role: co-founder of startup - Built product from scratch";
       const result = parseBullets(text);
-      expect(result.summary).toBe(text);
-      expect(result.highlights).toEqual([]);
+      assert.strictEqual(result.summary, text);
+      assert.deepStrictEqual(result.highlights, []);
     });
 
     it("does not treat hyphens in compound words as bullets (highlights)", () => {
@@ -96,16 +97,16 @@ describe("parseBullets", () => {
       const text =
         "co-founder - Built end-to-end solution - Deployed to production";
       const result = parseBullets(text);
-      expect(result.summary).toBe(text);
-      expect(result.highlights).toEqual([]);
+      assert.strictEqual(result.summary, text);
+      assert.deepStrictEqual(result.highlights, []);
     });
 
     it("supports hyphens as bullets when passed via custom bullets option", () => {
       const text =
         "co-founder - Built end-to-end solution - Deployed to production";
       const result = parseBullets(text, { bullets: "•-" });
-      expect(result.summary).toBe("co-founder");
-      expect(result.highlights).toEqual([
+      assert.strictEqual(result.summary, "co-founder");
+      assert.deepStrictEqual(result.highlights, [
         "Built end-to-end solution",
         "Deployed to production",
       ]);
@@ -115,32 +116,32 @@ describe("parseBullets", () => {
       const result = parseBullets("intro • one - two * three", {
         bullets: "•-*",
       });
-      expect(result.summary).toBe("intro");
-      expect(result.highlights).toEqual(["one", "two", "three"]);
+      assert.strictEqual(result.summary, "intro");
+      assert.deepStrictEqual(result.highlights, ["one", "two", "three"]);
     });
 
     it("should handle custom bullets with dash characters without regex error", () => {
-      expect(() =>
+      assert.doesNotThrow(() =>
         parseBullets("intro — one – two ‒ three", { bullets: "—–-‒" }),
-      ).not.toThrow();
+      );
       const result = parseBullets("intro — one – two ‒ three", {
         bullets: "—–-‒",
       });
-      expect(result.summary).toBe("intro");
-      expect(result.highlights).toEqual(["one", "two", "three"]);
+      assert.strictEqual(result.summary, "intro");
+      assert.deepStrictEqual(result.highlights, ["one", "two", "three"]);
     });
 
     it("should handle custom bullets with all regex special chars without regex error", () => {
-      expect(() =>
+      assert.doesNotThrow(() =>
         parseBullets("intro * one + two ? three", {
           bullets: "*+?^${}()|[]\\.-",
         }),
-      ).not.toThrow();
+      );
       const result = parseBullets("intro * one + two ? three", {
         bullets: "*+?^${}()|[]\\.-",
       });
-      expect(result.summary).toBe("intro");
-      expect(result.highlights).toEqual(["one", "two", "three"]);
+      assert.strictEqual(result.summary, "intro");
+      assert.deepStrictEqual(result.highlights, ["one", "two", "three"]);
     });
   });
 });

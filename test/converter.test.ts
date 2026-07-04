@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it } from "bun:test";
+import { beforeEach, describe, it } from "node:test";
+import assert from "node:assert/strict";
 import { type Output, Processor } from "../src/converter";
 
 describe("Processor", () => {
@@ -17,13 +18,13 @@ describe("Processor", () => {
     const csv =
       "First Name,Last Name,MaidenName,Address,ZipCode,GeoLocation,Occupation,Summary,Industry,Country,CountryCode,EmailAddress,PhoneNumber,Twitter,LinkedIn\nJohn,Smith,,123 Main St,12345,San Francisco CA,Software Engineer,Full-stack engineer,Tech,United States,US,john@example.com,+1-555-0123,,https://linkedin.com/in/john";
     processor.processFile(csv);
-    expect(result).not.toBeNull();
-    expect(result.basics).toBeDefined();
-    expect(result.basics.name).toBe("John Smith");
-    expect(result.basics.label).toBe("Software Engineer");
-    expect(result.basics.email).toBe("john@example.com");
-    expect(result.basics.phone).toBe("+1-555-0123");
-    expect(result.basics.location?.countryCode).toBe("US");
+    assert.notStrictEqual(result, null);
+    assert.notStrictEqual(result.basics, undefined);
+    assert.strictEqual(result.basics.name, "John Smith");
+    assert.strictEqual(result.basics.label, "Software Engineer");
+    assert.strictEqual(result.basics.email, "john@example.com");
+    assert.strictEqual(result.basics.phone, "+1-555-0123");
+    assert.strictEqual(result.basics.location?.countryCode, "US");
   });
 
   it("handles multiple CSV rows (Profile + Position)", () => {
@@ -39,12 +40,12 @@ describe("Processor", () => {
       "Position.csv,Acme Corp,Senior Dev,Our product handles payments • Built payment gateway • Reduced latency,2020-03,2024-06",
     ].join("\n");
     processor.processFile(csv);
-    expect(result.work).toBeDefined();
-    expect(result.work).toHaveLength(1);
-    expect(result.work[0].name).toBe("Acme Corp");
-    expect(result.work[0].position).toBe("Senior Dev");
-    expect(result.work[0].summary).toBe("Our product handles payments");
-    expect(result.work[0].highlights).toEqual([
+    assert.notStrictEqual(result.work, undefined);
+    assert.strictEqual(result.work.length, 1);
+    assert.strictEqual(result.work[0].name, "Acme Corp");
+    assert.strictEqual(result.work[0].position, "Senior Dev");
+    assert.strictEqual(result.work[0].summary, "Our product handles payments");
+    assert.deepStrictEqual(result.work[0].highlights, [
       "Built payment gateway",
       "Reduced latency",
     ]);
@@ -61,8 +62,8 @@ describe("Processor", () => {
       "Position.csv,Startup Inc,CTO,• Led team • Built product,2020-03,2024-06",
     ].join("\n");
     processor.processFile(csv);
-    expect(result.work[0].startDate).toBe("2020-03-01");
-    expect(result.work[0].endDate).toBe("2024-06-01");
+    assert.strictEqual(result.work[0].startDate, "2020-03-01");
+    assert.strictEqual(result.work[0].endDate, "2024-06-01");
   });
 
   it("handles Education.csv", () => {
@@ -76,13 +77,13 @@ describe("Processor", () => {
       "Education.csv,MIT,BS,Computer Science,2016-09,2020-06,3.8,Rocket Club,Dean list",
     ].join("\n");
     processor.processFile(csv);
-    expect(result.education).toBeDefined();
-    expect(result.education).toHaveLength(1);
-    expect(result.education[0].institution).toBe("MIT");
-    expect(result.education[0].area).toBe("Computer Science");
-    expect(result.education[0].studyType).toBe("BS");
-    expect(result.education[0].startDate).toBe("2016-09-01");
-    expect(result.education[0].endDate).toBe("2020-06-01");
+    assert.notStrictEqual(result.education, undefined);
+    assert.strictEqual(result.education.length, 1);
+    assert.strictEqual(result.education[0].institution, "MIT");
+    assert.strictEqual(result.education[0].area, "Computer Science");
+    assert.strictEqual(result.education[0].studyType, "BS");
+    assert.strictEqual(result.education[0].startDate, "2016-09-01");
+    assert.strictEqual(result.education[0].endDate, "2020-06-01");
   });
 
   it("handles Skills.csv", () => {
@@ -97,10 +98,10 @@ describe("Processor", () => {
       "Skills.csv,React,Advanced,3",
     ].join("\n");
     processor.processFile(csv);
-    expect(result.skills).toBeDefined();
-    expect(result.skills).toHaveLength(2);
-    expect(result.skills[0].name).toBe("TypeScript");
-    expect(result.skills[0].level).toBe("Expert");
+    assert.notStrictEqual(result.skills, undefined);
+    assert.strictEqual(result.skills.length, 2);
+    assert.strictEqual(result.skills[0].name, "TypeScript");
+    assert.strictEqual(result.skills[0].level, "Expert");
   });
 
   it("handles Languages.csv", () => {
@@ -115,9 +116,9 @@ describe("Processor", () => {
       "Languages.csv,Spanish,Professional working",
     ].join("\n");
     processor.processFile(csv);
-    expect(result.languages).toBeDefined();
-    expect(result.languages).toHaveLength(2);
-    expect(result.languages[0].language).toBe("English");
+    assert.notStrictEqual(result.languages, undefined);
+    assert.strictEqual(result.languages.length, 2);
+    assert.strictEqual(result.languages[0].language, "English");
   });
 
   it("handles empty CSV gracefully", () => {
@@ -127,6 +128,6 @@ describe("Processor", () => {
       },
     });
     processor.processFile("");
-    expect(result).not.toBeNull();
+    assert.notStrictEqual(result, null);
   });
 });

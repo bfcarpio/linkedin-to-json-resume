@@ -1,7 +1,7 @@
 # LinkedIn to JSON Résumé
+
 [![CI](https://github.com/bfcarpio/linkedin-to-json-resume/actions/workflows/ci.yml/badge.svg)](https://github.com/bfcarpio/linkedin-to-json-resume/actions/workflows/ci.yml)
 [![GitHub Pages](https://github.com/bfcarpio/linkedin-to-json-resume/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/bfcarpio/linkedin-to-json-resume/actions/workflows/gh-pages.yml)
-
 
 Converts LinkedIn profile exports into standardized [JSON Résumé](http://jsonresume.org/) format (v0.0.0).
 
@@ -13,10 +13,10 @@ https://bfcarpio.github.io/linkedin-to-json-resume/
 
 Benchmarked against the original Parcel-based CLI using [hyperfine](https://github.com/sharkdp/hyperfine) (10 runs, 3 warmup):
 
-| CLI                        | Mean        | Min         | Max          | Std Dev    |
-| -------------------------- | ----------- | ----------- | ------------ | ---------- |
-| Master (Parcel + Node)     | 145.3 ms    | 104.3 ms    | 177.0 ms     | 21.6 ms    |
-| **Modernize (tsup + Bun)** | **89.8 ms** | **77.0 ms** | **107.8 ms** | **9.7 ms** |
+| CLI                            | Mean        | Min         | Max          | Std Dev    |
+| ------------------------------ | ----------- | ----------- | ------------ | ---------- |
+| Master (Parcel + Node)         | 145.3 ms    | 104.3 ms    | 177.0 ms     | 21.6 ms    |
+| **Modernize (tsup + Node.js)** | **89.8 ms** | **77.0 ms** | **107.8 ms** | **9.7 ms** |
 
 The modernized CLI is **~38% faster** on average with **2× less variance**.
 
@@ -29,44 +29,44 @@ The modernized CLI is **~38% faster** on average with **2× less variance**.
 ## CLI Usage
 
 ```bash
-bunx github:bfcarpio/linkedin-to-json-resume <path-to-export.zip>
+npx github:bfcarpio/linkedin-to-json-resume <path-to-export.zip>
 ```
 
 Outputs `resume.json` to the current directory.
 
 ## Development
 
-**Prerequisites:** Bun v1.3.14+, Node v22+
+**Prerequisites:** Node.js 24+
 
 ```bash
 # Install dependencies
-bun install
+npm install
 
 # Build everything (web + CLI)
-bun run build
+npm run build
 
 # Run tests
-bun test
+node --test
 
 # Lint
-bun run lint
+npm run lint
 
 # Serve web app locally
-bun run dev
+npm run dev
 
 # Clean build artifacts
-bun run clean
+npm run clean
 
 # Run CLI against a test export
-bun run cli <path-to-export.zip>
+npm run cli <path-to-export.zip>
 ```
 
 ## Tech Stack
 
-- **Runtime/Build**: Bun (Node-compatible output)
+- **Runtime/Build**: Node.js (ESM)
 - **Bundler**: tsup
 - **Linter/Formatter**: Biome
-- **Tests**: bun:test
+- **Tests**: node:test
 - **Dependencies**: fflate (ZIP extraction)
 
 ## How It Works

@@ -1,11 +1,12 @@
-import { describe, expect, it } from "bun:test";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import { CSVToArray } from "../src/csvtoarray";
 
 describe("CSVToArray", () => {
   it("parses standard CSV with comma delimiter", () => {
     const csv = "a,b,c\n1,2,3\nx,y,z";
     const result = CSVToArray(csv);
-    expect(result).toEqual([
+    assert.deepStrictEqual(result, [
       ["a", "b", "c"],
       ["1", "2", "3"],
       ["x", "y", "z"],
@@ -16,40 +17,40 @@ describe("CSVToArray", () => {
     const csv =
       'name,description\n"Product A","Great, amazing, product"\n"Product B","Simple"';
     const result = CSVToArray(csv);
-    expect(result[1][1]).toBe("Great, amazing, product");
+    assert.strictEqual(result[1][1], "Great, amazing, product");
   });
 
   it("handles quoted fields with quotes inside (escaped quotes)", () => {
     const csv = 'name,note\n"John","Said ""hello"" to me"';
     const result = CSVToArray(csv);
-    expect(result[1][1]).toBe('Said "hello" to me');
+    assert.strictEqual(result[1][1], 'Said "hello" to me');
   });
 
   it("returns empty array for empty string", () => {
-    expect(CSVToArray("")).toEqual([[]]);
+    assert.deepStrictEqual(CSVToArray(""), [[]]);
   });
 
   it("handles single row", () => {
-    expect(CSVToArray("just,one,row")).toEqual([["just", "one", "row"]]);
+    assert.deepStrictEqual(CSVToArray("just,one,row"), [["just", "one", "row"]]);
   });
 
   it("handles rows with uneven column counts", () => {
     const csv = "a,b,c\n1,2\nx";
     const result = CSVToArray(csv);
-    expect(result[0]).toEqual(["a", "b", "c"]);
-    expect(result[2]).toHaveLength(1);
+    assert.deepStrictEqual(result[0], ["a", "b", "c"]);
+    assert.strictEqual(result[2].length, 1);
   });
 
   it("trims BOM character from start", () => {
     const csv = "\uFEFFa,b\n1,2";
     const result = CSVToArray(csv);
-    expect(result[0][0]).toBe("a");
+    assert.strictEqual(result[0][0], "a");
   });
 
   it("works with tab delimiter", () => {
     const csv = "a\tb\tc\n1\t2\t3";
     const result = CSVToArray(csv, "\t");
-    expect(result).toEqual([
+    assert.deepStrictEqual(result, [
       ["a", "b", "c"],
       ["1", "2", "3"],
     ]);

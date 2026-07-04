@@ -1,4 +1,5 @@
-import { describe, expect, it } from "bun:test";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import { type Output, Processor } from "../src/converter";
@@ -94,15 +95,15 @@ describe("JSON Resume Schema Validation", () => {
       output.meta = {};
     }
     // Ensure work[0].name not company
-    expect(output.work[0]).not.toHaveProperty("company");
-    expect(output.work[0]).toHaveProperty("name");
+    assert.ok(!Object.hasOwn(output.work[0], "company"));
+    assert.ok(Object.hasOwn(output.work[0], "name"));
 
     const valid = validate(output);
     if (!valid) {
       console.error("Validation errors:", ajv.errorsText(validate.errors));
       console.error("Errors detail:", JSON.stringify(validate.errors, null, 2));
     }
-    expect(valid).toBe(true);
+    assert.strictEqual(valid, true);
   });
 
   it("validates output for minimal profile (only basics)", () => {
@@ -126,7 +127,7 @@ describe("JSON Resume Schema Validation", () => {
     if (!valid) {
       console.error("Errors:", ajv.errorsText(validate.errors));
     }
-    expect(valid).toBe(true);
+    assert.strictEqual(valid, true);
   });
 });
 
@@ -161,7 +162,7 @@ describe("Key ordering", () => {
     const outputKeys = Object.keys(output);
     const expectedKeys = schemaKeys.filter((k) => outputKeys.includes(k));
 
-    expect(outputKeys).toEqual(expectedKeys);
+    assert.deepStrictEqual(outputKeys, expectedKeys);
   });
 
   it("basics keys follow schema order", () => {
@@ -189,7 +190,7 @@ describe("Key ordering", () => {
       outputBasicsKeys.includes(k),
     );
 
-    expect(outputBasicsKeys).toEqual(expectedBasicsKeys);
+    assert.deepStrictEqual(outputBasicsKeys, expectedBasicsKeys);
   });
 
   it("work entry keys follow schema order", () => {
@@ -221,6 +222,6 @@ describe("Key ordering", () => {
       outputWorkKeys.includes(k),
     );
 
-    expect(outputWorkKeys).toEqual(expectedWorkKeys);
+    assert.deepStrictEqual(outputWorkKeys, expectedWorkKeys);
   });
 });

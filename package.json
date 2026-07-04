@@ -4,7 +4,7 @@
   "description": "LinkedIn to JSON Résumé",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "main": "dist/main.js",
   "bin": "bin/cli",
@@ -13,25 +13,25 @@
     "src"
   ],
   "scripts": {
-    "dev": "bunx serve dist",
-    "build:web": "tsup --config tsup.config.web.ts && cp -r src/styles dist/ && cp src/index.html dist/ && sed -i \"s/__VERSION__/DEVELOPMENT/g\" dist/index.html && sed -i \"s/__COMMIT_SHA__/$(git rev-parse --short HEAD)/g\" dist/index.html && bun scripts/compress.mjs",
+    "dev": "npx serve dist",
+    "build:web": "tsup --config tsup.config.web.ts && cp -r src/styles dist/ && cp src/index.html dist/ && sed -i \"s/__VERSION__/DEVELOPMENT/g\" dist/index.html && sed -i \"s/__COMMIT_SHA__/$(git rev-parse --short HEAD)/g\" dist/index.html && node scripts/compress.mjs",
     "build:cli": "tsup --config tsup.config.cli.ts && chmod +x dist-cli/cli.js",
-    "build": "bun run build:web",
+    "build": "npm run build:web",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "fmt": "biome format --write src/",
-    "test": "bun test",
-    "ci": "bun run lint && bun run build && bun test",
-    "cli": "bun run build:cli && bun dist-cli/cli.js",
+    "test": "node --import tsx --test",
+    "ci": "npm run lint && npm run build && npm run test",
+    "cli": "npm run build:cli && node dist-cli/cli.js",
     "clean": "rm -rf dist dist-cli"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/bun": "latest",
     "@types/node": "^26.1.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "tsup": "^8.3.6",
+    "tsx": "^4.23.0",
     "typescript": "^6.0.3"
   },
   "dependencies": {

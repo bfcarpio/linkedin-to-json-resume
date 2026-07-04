@@ -1,57 +1,58 @@
-import { describe, expect, it } from "bun:test";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import { resolveCountry } from "../src/country-codes";
 
 describe("resolveCountry", () => {
   it('resolves "United States" to "US"', () => {
-    expect(resolveCountry("United States")).toBe("US");
+    assert.strictEqual(resolveCountry("United States"), "US");
   });
 
   it('resolves "United Kingdom" to "GB"', () => {
-    expect(resolveCountry("United Kingdom")).toBe("GB");
+    assert.strictEqual(resolveCountry("United Kingdom"), "GB");
   });
 
   it('resolves "Canada" to "CA"', () => {
-    expect(resolveCountry("Canada")).toBe("CA");
+    assert.strictEqual(resolveCountry("Canada"), "CA");
   });
 
   it('resolves "Germany" to "DE"', () => {
-    expect(resolveCountry("Germany")).toBe("DE");
+    assert.strictEqual(resolveCountry("Germany"), "DE");
   });
 
   it('resolves "India" to "IN"', () => {
-    expect(resolveCountry("India")).toBe("IN");
+    assert.strictEqual(resolveCountry("India"), "IN");
   });
 
   it('resolves "Australia" to "AU"', () => {
-    expect(resolveCountry("Australia")).toBe("AU");
+    assert.strictEqual(resolveCountry("Australia"), "AU");
   });
 
   it("returns undefined for unknown country", () => {
-    expect(resolveCountry("Atlantis")).toBeUndefined();
+    assert.strictEqual(resolveCountry("Atlantis"), undefined);
   });
 
   it("returns undefined for empty string", () => {
-    expect(resolveCountry("")).toBeUndefined();
+    assert.strictEqual(resolveCountry(""), undefined);
   });
 
   it("is case insensitive", () => {
-    expect(resolveCountry("united states")).toBe("US");
-    expect(resolveCountry("UNITED STATES")).toBe("US");
-    expect(resolveCountry("france")).toBe("FR");
+    assert.strictEqual(resolveCountry("united states"), "US");
+    assert.strictEqual(resolveCountry("UNITED STATES"), "US");
+    assert.strictEqual(resolveCountry("france"), "FR");
   });
 
   it('resolves "United States of America" to "US" (alias)', () => {
-    expect(resolveCountry("United States of America")).toBe("US");
+    assert.strictEqual(resolveCountry("United States of America"), "US");
   });
 
   it("resolves common English country names", () => {
-    expect(resolveCountry("France")).toBe("FR");
-    expect(resolveCountry("Spain")).toBe("ES");
-    expect(resolveCountry("Japan")).toBe("JP");
-    expect(resolveCountry("Brazil")).toBe("BR");
-    expect(resolveCountry("Netherlands")).toBe("NL");
-    expect(resolveCountry("Sweden")).toBe("SE");
-    expect(resolveCountry("Switzerland")).toBe("CH");
-    expect(resolveCountry("Italy")).toBe("IT");
+    assert.strictEqual(resolveCountry("France"), "FR");
+    assert.strictEqual(resolveCountry("Spain"), "ES");
+    assert.strictEqual(resolveCountry("Japan"), "JP");
+    assert.strictEqual(resolveCountry("Brazil"), "BR");
+    assert.strictEqual(resolveCountry("Netherlands"), "NL");
+    assert.strictEqual(resolveCountry("Sweden"), "SE");
+    assert.strictEqual(resolveCountry("Switzerland"), "CH");
+    assert.strictEqual(resolveCountry("Italy"), "IT");
   });
 });
