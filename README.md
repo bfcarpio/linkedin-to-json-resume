@@ -9,23 +9,6 @@ Converts LinkedIn profile exports into standardized [JSON Résumé](http://jsonr
 
 https://bfcarpio.github.io/linkedin-to-json-resume/
 
-## Performance
-
-Benchmarked against the original Parcel-based CLI using [hyperfine](https://github.com/sharkdp/hyperfine) (10 runs, 3 warmup):
-
-| CLI                            | Mean        | Min         | Max          | Std Dev    |
-| ------------------------------ | ----------- | ----------- | ------------ | ---------- |
-| Master (Parcel + Node)         | 145.3 ms    | 104.3 ms    | 177.0 ms     | 21.6 ms    |
-| **Modernize (tsup + Node.js)** | **89.8 ms** | **77.0 ms** | **107.8 ms** | **9.7 ms** |
-
-The modernized CLI is **~38% faster** on average with **2× less variance**.
-
-## Quick Start (web app)
-
-1. Download your data from [LinkedIn's Data Export Page](https://www.linkedin.com/settings/data-export-page)
-1. Drag and drop your LinkedIn export ZIP
-1. Download your `resume.json`
-
 ## CLI Usage
 
 ```bash
